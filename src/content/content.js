@@ -147,9 +147,16 @@ function getChannelInfo() {
     // mobile (m.youtube.com)
     document.querySelector('ytm-slim-owner-renderer a[href*="/@"]') ||
     document.querySelector('ytm-slim-owner-renderer a[href*="/channel/"]') ||
-    document.querySelector("ytm-slim-owner-renderer a");
+    document.querySelector("ytm-slim-owner-renderer a") ||
+    // fallbacks that do not depend on the (frequently changing) player layout:
+    // schema.org microdata of the watch page, then any link to the channel handle
+    document.querySelector('[itemprop="author"] link[itemprop="url"]') ||
+    document.querySelector(`a[href*="/@${CHANNEL_HANDLE}" i]`);
   if (!a) return null;
-  return { name: a.textContent.trim(), href: a.getAttribute("href") || "" };
+  // <link> elements have no text: the name is in a sibling <link itemprop="name" content="...">
+  const name = a.textContent.trim() ||
+    a.parentElement?.querySelector('link[itemprop="name"]')?.getAttribute("content") || "";
+  return { name, href: a.getAttribute("href") || a.getAttribute("content") || a.href || "" };
 }
 
 // The channel block can be unmounted while the player is fullscreen (esp. on mobile),

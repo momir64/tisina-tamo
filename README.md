@@ -51,6 +51,9 @@ Svako podešavanje se čuva automatski. Dugme „Vrati podrazumevana podešavanj
 - Na ekranima osetljivim na dodir iskačući prozor se prilagođava ekranu, a fraze se dodaju dugmetom **+**
   ili zarezom.
 - Na telefonu je OCR sporiji i koristi manje slike. Veći „Interval skeniranja“ štedi bateriju.
+- **Firefox za Android:** da bi dodatak mogao da vidi sliku videa, u `about:config` postavi
+  `media.hardware-video-decoding.enabled` na `false` i restartuj pregledač. Bez toga pregledač dodatku
+  daje praznu sliku i ništa se ne utišava.
 
 ## Za programere
 

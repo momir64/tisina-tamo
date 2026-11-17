@@ -9,7 +9,13 @@ function setIcon(enabled) {
   const suffix = enabled ? "" : "_off";
   const path = {};
   for (const n of [16, 32, 48, 128]) path[n] = api.runtime.getURL(`icons/icon${n}${suffix}.png`);
-  api.action.setIcon({ path });
+  // Not every browser (e.g. Firefox for Android) implements action.setIcon. It must never throw
+  // here: an exception at load time would stop the message listener below from being registered.
+  try {
+    const bar = api.action ?? api.browserAction;
+    const r = bar?.setIcon?.({ path });
+    if (r && r.catch) r.catch(() => {});
+  } catch {}
 }
 function syncIcon() {
   api.storage.sync.get({ enabled: true }, (s) => setIcon(s.enabled));
