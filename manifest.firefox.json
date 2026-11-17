@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Tišina tamo",
     "version": "0.1.0",
-    "description": "Mutes @ParlamentSrbija videos on YouTube while a chosen text is visible on screen (OCR).",
+    "description": "Dosta je bilo slušanja picoustong i ostale bagre. Čim se pojave na prenosu skupštine, gasi zvuk i bluruje sliku. Odu li, vraća sve.",
     "icons": {
         "16": "icons/icon16.png",
         "32": "icons/icon32.png",
