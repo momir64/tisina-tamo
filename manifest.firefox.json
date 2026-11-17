@@ -1,0 +1,62 @@
+{
+    "manifest_version": 3,
+    "name": "Tišina tamo",
+    "version": "0.1.0",
+    "description": "Mutes @ParlamentSrbija videos on YouTube while a chosen text is visible on screen (OCR).",
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "host_permissions": [
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*"
+    ],
+    "background": {
+        "scripts": [
+            "vendor/tesseract.min.js",
+            "src/ocr/ocr.js",
+            "src/background/background.js"
+        ]
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.youtube.com/*",
+                "https://m.youtube.com/*"
+            ],
+            "js": [
+                "src/content/content.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ],
+    "action": {
+        "default_title": "Tišina tamo",
+        "default_popup": "src/popup/popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "32": "icons/icon32.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        }
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "tisina-tamo@moma.rs",
+            "data_collection_permissions": {
+                "required": [
+                    "none"
+                ]
+            }
+        },
+        "gecko_android": {}
+    }
+}
