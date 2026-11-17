@@ -8,7 +8,7 @@ const USE_OFFSCREEN = !!api.offscreen;
 function setIcon(enabled) {
   const suffix = enabled ? "" : "_off";
   const path = {};
-  for (const n of [16, 32, 48, 128]) path[n] = `icons/icon${n}${suffix}.png`;
+  for (const n of [16, 32, 48, 128]) path[n] = api.runtime.getURL(`icons/icon${n}${suffix}.png`);
   api.action.setIcon({ path });
 }
 function syncIcon() {

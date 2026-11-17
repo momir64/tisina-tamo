@@ -2,7 +2,7 @@
 
 Usage: python build.py
 Each zip contains the browser's manifest renamed to manifest.json plus src/, vendor/ and icons/.
-The root manifest.json is a Firefox dev copy and is never packaged.
+The root manifest.json is a Chrome dev copy and is never packaged.
 """
 import json
 import zipfile
