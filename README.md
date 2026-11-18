@@ -1,8 +1,6 @@
 # Tišina tamo
 
-Dodatak za Chrome i Firefox (Manifest V3) koji utišava picoustog i njegove mafijaše kad god se pojave
-u prenosu sa **@ParlamentSrbija** YouTube kanala. Dosta je bilo slušanja: čim se na ekranu pojavi
-njihovo ime, zvuk nestaje. Čim ime nestane, zvuk se vraća.
+Dosta je bilo slušanja i gledanja picoustong i ostale bagre. Tišina tamo im momentalno gasi mikrofon i bluruje sliku na YouTube prenosu skupštine čim se pojave na ekranu. Kada je vazduh ponovo čist zvuk i slika se vraćaju nazad.
 
 ## Kako radi
 
