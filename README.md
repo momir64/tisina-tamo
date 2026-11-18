@@ -2,6 +2,15 @@
 
 Dosta je bilo slušanja i gledanja picoustong i ostale bagre. Tišina tamo im momentalno gasi mikrofon i bluruje sliku na YouTube prenosu skupštine čim se pojave na ekranu. Kada je vazduh ponovo čist zvuk i slika se vraćaju nazad.
 
+## Instalacija
+
+Dodatak je dostupan za Chrome i Firefox, a instalira se preko jednog od dugmadi ispod:
+
+<p>
+  <a href="https://chromewebstore.google.com/detail/ti%C5%A1ina-tamo/hpdkgkljlggfbkdoljmgfkhkpphdahom"><img src="https://developer.chrome.com/static/docs/webstore/branding/image/HRs9MPufa1J1h5glNhut.png" alt="Available in the Chrome Web Store" height="58"></a>&nbsp;
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/ti%C5%A1ina-tamo/"><img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="Get the Add-on for Firefox" height="58"></a>
+</p>
+
 ## Kako radi
 
 U prenosima skupštine ime govornika je ispisano belim slovima na dnu ekrana. Dodatak nekoliko puta u
@@ -14,8 +23,8 @@ neka od zadatih fraza. Ako se nalazi, video se utišava; kad fraza nestane, zvuk
 
 ### Podrazumevane fraze
 
-`Александар Вучић`, `Србија побеђује`, `Вучић`. Dodaj ili ukloni koliko god želiš u iskačućem prozoru.
-Fraze možeš da kucaš ćirilicom ili latinicom, svejedno je.
+`Александар Вучић`, `Србија побеђује`, `Вучић`. U iskačućem prozoru se može dodati ili ukloniti koliko god je potrebno.
+Fraze se mogu kucati ćirilicom ili latinicom, svejedno je.
 
 ## Podešavanja (klik na ikonu dodatka)
 
@@ -27,7 +36,7 @@ Fraze možeš da kucaš ćirilicom ili latinicom, svejedno je.
 | Oblast skeniranja | Deo kadra koji se čita, u procentima (levo, gore, širina, visina). Što je manji, brže je i tačnije. Default je traka pri dnu ekrana. |
 | Interval skeniranja | Pauza između skeniranja u milisekundama (default 300). |
 | Uzastopnih skeniranja | Koliko skeniranja zaredom mora da se složi pre promene stanja zvuka (default 3). Sprečava treperenje zbog pogrešno pročitanog kadra. |
-| Osetljivost na bela slova | Tekst na ekranu je čisto bele boje, pa se čitaju samo dovoljno svetli pikseli. Ako se tekst ne hvata, smanji vrednost; ako smeta pozadina, povećaj. |
+| Osetljivost na bela slova | Tekst na ekranu je čisto bele boje, pa se čitaju samo dovoljno svetli pikseli. Ako se tekst ne hvata, vrednost treba smanjiti; ako smeta pozadina, povećati. |
 | Tolerancija grešaka | Koliko pogrešno pročitanih slova se toleriše pri poređenju fraze (default 1). Veće vrednosti hvataju više, ali su i češći lažni pogoci. |
 | Dijagnostički prikaz | Prikazuje u uglu stranice šta dodatak vidi: isečak videa, masku belog, pročitani tekst i stanje zvuka. Radi i kad je dodatak isključen (tada samo prikazuje, ne menja zvuk). |
 
@@ -36,9 +45,9 @@ Svako podešavanje se čuva automatski. Dugme „Vrati podrazumevana podešavanj
 ## Poznata ograničenja
 
 - Kad je kartica u pozadini ili prozor prekriven, pregledač prestaje da crta video, pa dodatak ne može da
-  čita tekst. Tada ostaje u stanju u kojem je bio i nastavlja čim se vratiš na karticu.
-- OCR nije savršen. Ako ime ne bude uhvaćeno, probaj da smanjiš oblast skeniranja, podesiš osetljivost na
-  bela slova ili povećaš toleranciju grešaka. Dijagnostički prikaz pokazuje šta se zapravo čita.
+  čita tekst. Tada ostaje u stanju u kojem je bio i nastavlja čim se kartica ponovo prikaže.
+- OCR nije savršen. Ako ime ne bude uhvaćeno, mogu pomoći manja oblast skeniranja, drugačija osetljivost na
+  bela slova ili veća tolerancija grešaka. Dijagnostički prikaz pokazuje šta se zapravo čita.
 - Radi samo na veb-sajtu (`youtube.com`, `m.youtube.com`), ne u YouTube aplikaciji.
 
 ## Telefoni
@@ -49,8 +58,8 @@ Svako podešavanje se čuva automatski. Dugme „Vrati podrazumevana podešavanj
 - Na ekranima osetljivim na dodir iskačući prozor se prilagođava ekranu, a fraze se dodaju dugmetom **+**
   ili zarezom.
 - Na telefonu je OCR sporiji i koristi manje slike. Veći „Interval skeniranja“ štedi bateriju.
-- **Firefox za Android:** da bi dodatak mogao da vidi sliku videa, u `about:config` postavi
-  `media.hardware-video-decoding.enabled` na `false` i restartuj pregledač. Bez toga pregledač dodatku
+- **Firefox za Android:** da bi dodatak mogao da vidi sliku videa, u `about:config` treba postaviti
+  `media.hardware-video-decoding.enabled` na `false` i restartovati pregledač. Bez toga pregledač dodatku
   daje praznu sliku i ništa se ne utišava.
 
 ## Za programere
@@ -59,7 +68,6 @@ Svako podešavanje se čuva automatski. Dugme „Vrati podrazumevana podešavanj
 ```
 manifest.chrome.json     Chrome manifest (service worker + offscreen dokument)
 manifest.firefox.json    Firefox manifest (pozadinska stranica)
-manifest.json            Razvojna kopija Firefox manifesta (ne ide u paket)
 build.py                 Pravi dist/*.zip za oba pregledača
 icons/                   iconNN.png = uključeno, iconNN_off.png = isključeno (16/32/48/128); source/ sadrži SVG
 src/
@@ -77,8 +85,8 @@ python build.py
 Pravi `dist/tisina-tamo-chrome-<verzija>.zip` i `dist/tisina-tamo-firefox-<verzija>.zip`.
 
 ### Učitavanje za razvoj
-- **Firefox:** `about:debugging` → This Firefox → Load Temporary Add-on → izaberi `manifest.json` iz korena.
-- **Chrome/Edge:** raspakuj Chrome paket, pa `chrome://extensions` → Developer mode → Load unpacked.
+- **Firefox:** `about:debugging` → This Firefox → Load Temporary Add-on → `manifest.json` iz korena.
+- **Chrome/Edge:** raspakovati Chrome paket, pa `chrome://extensions` → Developer mode → Load unpacked.
 
 ### Razlike između pregledača
 - Chrome nema DOM u service worker-u, pa se OCR izvršava u offscreen dokumentu (`src/ocr/offscreen.html`).
