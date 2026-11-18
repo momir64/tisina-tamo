@@ -7,7 +7,7 @@ const DEFAULTS = {
   blurVideo: true, // blur the whole video while it is muted
   intervalMs: 300,
   holdScans: 3,
-  region: { x: 26, y: 88, w: 48, h: 12 },
+  region: { x: 0, y: 88, w: 100, h: 12 },
   hammingTolerance: 1, // wrong characters allowed when matching a phrase
   whitePercent: 86, // % of full brightness (86% = 220/255)
   debug: false,

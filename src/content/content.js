@@ -15,7 +15,7 @@ const DEFAULTS = {
   blurVideo: true,     // blur the whole video while we hold the mute
   intervalMs: 300,
   holdScans: 3,        // consecutive scans with the new result needed to change mute state
-  region: { x: 26, y: 88, w: 48, h: 12 }, // % of the frame to scan
+  region: { x: 0, y: 88, w: 100, h: 12 }, // % of the frame to scan
   hammingTolerance: 1, // max wrong characters (substitutions) allowed when matching a phrase
   whitePercent: 86,    // min(R,G,B) at/above this % of 255 counts as "white text" (86% -> 220)
   debug: false,
@@ -210,20 +210,11 @@ for (const ev of ["pointerdown", "keydown", "touchstart"]) {
   document.addEventListener(ev, () => (lastUserInput = Date.now()), true);
 }
 let lastWantMute = false;   // what the latest scan wanted (raw, before the consecutive-scans rule)
-let externalUnmutes = 0;    // how many times something else unmuted us and we re-muted at once
 let remuteTimes = [];       // timestamps, to avoid fighting YouTube in a loop
-
-// Diagnostics: which video event happened right before an external unmute.
-let lastVideoEvent = { name: "", t: 0 };
-const unmuteCauses = {}; // event name -> count
 
 function watchVideo(video) {
   if (video === lastVideo) return;
   lastVideo = video;
-  for (const ev of ["play", "playing", "pause", "seeking", "seeked", "waiting", "stalled",
-    "loadstart", "loadedmetadata", "emptied", "canplay", "ratechange", "resize"]) {
-    video.addEventListener(ev, () => (lastVideoEvent = { name: ev, t: Date.now() }));
-  }
   video.addEventListener("volumechange", () => {
     if (selfChange || !weMuted || video.muted) return;
     const byUser = Date.now() - lastUserInput < 1500;
@@ -238,9 +229,6 @@ function watchVideo(video) {
     // Unmuted by something else while the text is still visible: mute again right away
     // instead of waiting for several scans.
     remuteTimes.push(now);
-    externalUnmutes++;
-    const cause = now - lastVideoEvent.t < 500 ? lastVideoEvent.name : "nepoznato";
-    unmuteCauses[cause] = (unmuteCauses[cause] || 0) + 1;
     setMuted(video, true);
   });
 }
@@ -430,10 +418,7 @@ async function tick() {
       ...(settings.enabled ? [] : ["Dodatak je isključen. Dijagnostika radi, ali zvuk se neće menjati."]),
       `kanal: ${getChannelInfo()?.name}`,
       `tekst prisutan: ${present ? "da" : "ne"}`,
-      `zvuk: ${video.muted ? "utišan" : "uključen"}  (promena za: ${oppositeStreak}/${Math.max(1, settings.holdScans)} skeniranja)` +
-        (externalUnmutes
-          ? `\nspolja uključen zvuk: ${externalUnmutes}x  (povod: ${Object.entries(unmuteCauses).map(([k, v]) => `${k} ${v}x`).join(", ")})`
-          : ""),
+      `zvuk: ${video.muted ? "utišan" : "uključen"}  (promena za: ${oppositeStreak}/${Math.max(1, settings.holdScans)} skeniranja)`,
       `OCR: ${res.text.trim().replace(/\s+/g, " ").slice(0, 200)}`,
     ];
     lastScan = { lines, raw: frame.raw, processed: frame.image };
