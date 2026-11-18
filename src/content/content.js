@@ -193,14 +193,18 @@ function applyBlur(video, on) {
   }
 }
 function syncBlur(video) {
-  applyBlur(video, settings.enabled && settings.blurVideo && weMuted);
+  applyBlur(video, settings.enabled && settings.blurVideo && weMuted && !adOwnedMute);
 }
 
-function setMuted(video, muted) {
+// blur = false for a mute that has nothing to do with the speaker (ads): sound off, picture untouched.
+function setMuted(video, muted, blur = true) {
   selfChange = true;
   video.muted = muted;
+  // Also mute through YouTube's player API (page-bridge.js), so the player UI shows it and YouTube
+  // does not undo it. video.muted above stays as the fallback if the bridge is not available.
+  window.dispatchEvent(new CustomEvent("tisina-tamo:mute", { detail: muted ? "1" : "0" }));
   setTimeout(() => (selfChange = false), 0);
-  applyBlur(video, muted && settings.blurVideo);
+  applyBlur(video, muted && blur && settings.blurVideo);
 }
 
 // Remember when the user last interacted, to tell their (un)mute apart from one done by
@@ -211,6 +215,8 @@ for (const ev of ["pointerdown", "keydown", "touchstart"]) {
 }
 let lastWantMute = false;   // what the latest scan wanted (raw, before the consecutive-scans rule)
 let remuteTimes = [];       // timestamps, to avoid fighting YouTube in a loop
+let adOwnedMute = false;    // true while we hold the mute only because an ad is playing
+let adSeen = false;         // the current ad has already been handled
 
 function watchVideo(video) {
   if (video === lastVideo) return;
@@ -236,6 +242,7 @@ function watchVideo(video) {
 function release(video) {
   if (weMuted && video) setMuted(video, false);
   weMuted = false;
+  adOwnedMute = false;
   oppositeStreak = 0;
 }
 
@@ -370,9 +377,26 @@ async function tick() {
       showOverlay(["kanal se ne poklapa: " + (getChannelInfo()?.name ?? "?")]);
       return;
     }
+    // Ads on a watched video are muted too (sound only, no blur) and handed back when the ad ends,
+    // unless the speaker mute is active or the user muted/unmuted by hand.
+    const ad = isAdShowing();
+    if (settings.enabled) {
+      if (ad && !adSeen) {
+        adSeen = true; // decide once per ad, so a manual unmute during the ad is respected
+        if (!weMuted && !video.muted) {
+          setMuted(video, true, false);
+          weMuted = true;
+          adOwnedMute = true;
+        }
+      } else if (!ad) {
+        adSeen = false;
+        if (adOwnedMute) release(video);
+      }
+      if (ad && adOwnedMute) lastWantMute = true; // re-mute at once if something unmutes the ad
+    }
     // In diagnostic mode say why nothing is scanned instead of silently doing nothing.
     const skip = video.paused ? "video je pauziran" : video.ended ? "video je završen"
-      : document.hidden ? "kartica nije vidljiva" : isAdShowing() ? "reklama" : null;
+      : document.hidden ? "kartica nije vidljiva" : ad ? "reklama (utišana)" : null;
     if (skip) {
       oppositeStreak = 0; // a gap in scanning breaks the "consecutive scans" run
       showSkip(`preskočeno: ${skip}`);

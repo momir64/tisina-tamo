@@ -19,8 +19,7 @@ neka od zadatih fraza. Ako se nalazi, video se utišava; kad fraza nestane, zvuk
 
 - Radi samo na videima sa kanala **@ParlamentSrbija** (ugrađeno u kod).
 - Sve se izvršava lokalno u pregledaču. Ništa se ne šalje na internet.
-- Utišava preko `video.muted` i vraća zvuk samo ako ga je sam utišao. Reklame i pauzirani video se preskaču.
-
+- Zvuk vraća samo ako ga je sam utišao.
 ### Podrazumevane fraze
 
 `Александар Вучић`, `Србија побеђује`, `Вучић`. U iskačućem prozoru se može dodati ili ukloniti koliko god je potrebno.
@@ -73,6 +72,7 @@ icons/                   iconNN.png = uključeno, iconNN_off.png = isključeno (
 src/
   background/            Service worker / pozadinska skripta (prosleđuje OCR zahteve)
   content/               Radi na youtube.com: prepoznaje kanal, skenira kadrove, utišava
+                         (page-bridge.js radi u svetu same stranice i poziva mute/unMute plejera)
   ocr/                   Tesseract omotač (+ offscreen stranica samo za Chrome)
   popup/                 Iskačući prozor sa podešavanjima (html, css, js)
 vendor/                  Tesseract.js, WASM jezgro i srpski (ćirilični) jezički podaci
