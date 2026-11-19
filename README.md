@@ -4,7 +4,7 @@ Dosta je bilo slušanja i gledanja picoustong i ostale bagre. Tišina tamo im mo
 
 ## Instalacija
 
-Dodatak je dostupan za Chrome i Firefox, a instalira se preko jednog od dugmadi ispod:
+Dodatak je dostupan za Chrome i Firefox. Dugmad ispod vodi do stranica za instaliranje:
 
 <p>
   <a href="https://chromewebstore.google.com/detail/ti%C5%A1ina-tamo/hpdkgkljlggfbkdoljmgfkhkpphdahom"><img src="https://developer.chrome.com/static/docs/webstore/branding/image/HRs9MPufa1J1h5glNhut.png" alt="Available in the Chrome Web Store" height="58"></a>&nbsp;
